@@ -3,6 +3,7 @@ package io.agora.openvcall.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -18,11 +19,12 @@ import android.widget.Spinner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.agora.openvcall.AGApplication;
 import io.agora.openvcall.R;
 import io.agora.openvcall.model.ConstantApp;
+import io.agora.openvcall.model.CurrentUserSettings;
 
-public class MainActivity extends BaseActivity {
-
+public class MainActivity extends AppCompatActivity {
     private final static Logger log = LoggerFactory.getLogger(MainActivity.class);
 
     @Override
@@ -35,10 +37,11 @@ public class MainActivity extends BaseActivity {
             ab.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             ab.setCustomView(R.layout.ard_agora_actionbar);
         }
+
+        initUIAndEvent();
     }
 
-    @Override
-    protected void initUIandEvent() {
+    protected void initUIAndEvent() {
         EditText v_channel = (EditText) findViewById(R.id.channel_name);
         v_channel.addTextChangedListener(new TextWatcher() {
             @Override
@@ -92,10 +95,6 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void deInitUIandEvent() {
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
@@ -145,10 +144,7 @@ public class MainActivity extends BaseActivity {
         startActivity(i);
     }
 
-    @Override
-    public void workerThreadReady() {
-
+    public CurrentUserSettings vSettings() {
+        return AGApplication.mVideoSettings;
     }
-
-
 }

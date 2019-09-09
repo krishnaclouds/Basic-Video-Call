@@ -116,7 +116,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     @Override
-    protected void initUIandEvent() {
+    protected void initUIAndEvent() {
         event().addEventHandler(this);
 
         Intent i = getIntent();
@@ -413,7 +413,7 @@ public class CallActivity extends BaseActivity implements DuringCallEventHandler
     }
 
     @Override
-    protected void deInitUIandEvent() {
+    protected void deInitUIAndEvent() {
         optionalDestroy();
 
         doLeaveChannel();

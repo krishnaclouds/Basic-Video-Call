@@ -43,17 +43,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                 } else {
                     layout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
-                initUIandEvent();
+                initUIAndEvent();
             }
         });
     }
 
-    protected abstract void initUIandEvent();
+    protected abstract void initUIAndEvent();
 
-    protected abstract void deInitUIandEvent();
-
-    protected void workerThreadReady() {
-    }
+    protected abstract void deInitUIAndEvent();
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -83,7 +80,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        deInitUIandEvent();
+        deInitUIAndEvent();
         super.onDestroy();
     }
 
@@ -126,34 +123,34 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         if (Manifest.permission.CAMERA.equals(permission)) {
-            ((AGApplication) getApplication()).initWorkerThread();
-            workerThreadReady();
+            // ((AGApplication) getApplication()).initWorker();
         }
         return true;
     }
 
-    protected RtcEngine rtcEngine() {
-        return ((AGApplication) getApplication()).getWorkerThread().getRtcEngine();
+    protected AGApplication application() {
+        return (AGApplication) getApplication();
     }
 
-    protected final WorkerThread worker() {
-        return ((AGApplication) getApplication()).getWorkerThread();
+    protected RtcEngine rtcEngine() {
+        return application().getWorker().getRtcEngine();
+    }
+
+    protected final RtcWorker worker() {
+        return application().getWorker();
     }
 
     protected final EngineConfig config() {
-        return ((AGApplication) getApplication()).getWorkerThread().getEngineConfig();
+        return worker().getEngineConfig();
     }
 
     protected final MyEngineEventHandler event() {
-        return ((AGApplication) getApplication()).getWorkerThread().eventHandler();
+        return worker().eventHandler();
     }
 
     public final void showLongToast(final String msg) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-            }
+        runOnUiThread(() -> {
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
         });
     }
 
@@ -175,8 +172,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, ConstantApp.PERMISSION_REQ_ID_WRITE_EXTERNAL_STORAGE);
-                    ((AGApplication) getApplication()).initWorkerThread();
-                    workerThreadReady();
+                    //((AGApplication) getApplication()).initWorker();
                 } else {
                     finish();
                 }
@@ -191,10 +187,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
             }
         }
-    }
-
-    protected CurrentUserSettings vSettings() {
-        return AGApplication.mVideoSettings;
     }
 
     protected int virtualKeyHeight() {
@@ -281,4 +273,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 //        TextView textVersion = (TextView) findViewById(R.id.app_version);
 //        textVersion.setText(version);
     }
+
+
 }

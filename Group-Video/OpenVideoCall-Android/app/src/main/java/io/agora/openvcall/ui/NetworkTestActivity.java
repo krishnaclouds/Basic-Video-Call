@@ -33,7 +33,7 @@ public class NetworkTestActivity extends BaseActivity implements BeforeCallEvent
     }
 
     @Override
-    protected void initUIandEvent() {
+    protected void initUIAndEvent() {
         event().addEventHandler(this);
 
         ((TextView) findViewById(R.id.ovc_page_title)).setText(R.string.label_network_testing);
@@ -47,7 +47,7 @@ public class NetworkTestActivity extends BaseActivity implements BeforeCallEvent
     }
 
     @Override
-    protected void deInitUIandEvent() {
+    protected void deInitUIAndEvent() {
         rtcEngine().stopLastmileProbeTest();
         event().removeEventHandler(this);
     }
